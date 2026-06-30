@@ -22,8 +22,13 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
-    "Operating System :: Unix",
+    "Operating System :: POSIX :: Linux",
+    "Environment :: GPU :: NVIDIA CUDA",
 ]
 dependencies = [
     "qutip>=5.3.0",
@@ -36,9 +41,17 @@ Homepage = "https://qutip.org"
 Documentation = "https://qutip-cuquantum.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
+# Bindings only. These assume the matching CUDA runtime libraries (cuBLAS, cuSOLVER,
+# cuSPARSE, cuFFT) are already available via a system CUDA Toolkit on the loader path
 cuda11 = ["cupy-cuda11x", "cuquantum-python-cu11"]
 cuda12 = ["cupy-cuda12x", "cuquantum-python-cu12"]
 cuda13 = ["cupy-cuda13x", "cuquantum-python-cu13"]
+# Self-contained. These also pull CUDA runtime libraries as wheels (via CuPy's [ctk] extra),
+# so only the NVIDIA driver needs to be present. Recommended for fresh environments,
+# containers, or CI without a system CUDA Toolkit.
+cuda12-full = ["cupy-cuda12x[ctk]", "cuquantum-python-cu12"]
+cuda13-full = ["cupy-cuda13x[ctk]", "cuquantum-python-cu13"]
+
 tests = ["pytest>=6.0"]
 
 [project.entry-points."qutip.family"]
